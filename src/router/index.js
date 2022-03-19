@@ -1,23 +1,35 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Total from '../views/Total.vue'
+import Countries from '../views/Countries.vue'
+import Country from '../views/Country.vue'
+import store from '@/store/index.js';
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Total',
+    component: Total
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/countries',
+    name: 'Countries stats',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Countries.vue'),
+   
+  },
+  {
+    path: '/country/:queryName',
+    name: 'Country',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Country.vue'),
+    props: true,
+    beforeEnter(to, from, next) {
+      let queryName = to.params.queryName
+      store.dispatch('newCountryName', queryName)
+      next()
+    }
+  },
 ]
 
 const router = new VueRouter({
